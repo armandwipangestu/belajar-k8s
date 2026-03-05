@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-app
+  labels:
+    app: web
+    environment: production
+  annotations:
+    description: "Production web application server"
+    version: "2.1.0"
+    build-date: "2026-03-01T10:00:00Z"
+    git-commit: "a1b2c3d4e5f6"
+    git-branch: "main"
+    deployed-by: "john.doe@company.com"
+    jira-ticket: "PROJ-1234"
+    contact: "platform-team@company.com"
+    documentation: "https://docs.company.com/web-app"
+    kubernetes.io/change-cause: "Deploy version 2.1.0 with security fixes"
+spec:
+  containers:
+    - name: web
+      image: nginx:1.25
+      ports:
+        - containerPort: 80
