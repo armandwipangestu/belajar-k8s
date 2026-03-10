@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: backend-team
+  labels:
+    team: backend
+    environment: production
+    cost-center: engineering
+  annotations:
+    description: "Namespace for backend team production workloads"
+    contact: "backend-team@company.com"
+    created-by: "platform-team"
