@@ -1,0 +1,47 @@
+# Development deployment
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-app
+  namespace: development
+  labels:
+    app: web
+    environment: development
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      ports:
+        - containerPort: 80
+---
+# Staging deployment
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-app
+  namespace: staging
+  labels:
+    app: web
+    environment: staging
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      ports:
+        - containerPort: 80
+---
+# Production deployment
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-app
+  namespace: production
+  labels:
+    app: web
+    environment: production
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      ports:
+        - containerPort: 80
