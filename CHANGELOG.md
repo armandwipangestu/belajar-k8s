@@ -1,3 +1,9 @@
+## [1.3.1](https://github.com/armandwipangestu/belajar-k8s/compare/v1.3.0...v1.3.1) (2026-03-10)
+
+### 🧹 Chores
+
+* **deps-dev:** bump @semantic-release/npm from 13.1.4 to 13.1.5 ([14a7a18](https://github.com/armandwipangestu/belajar-k8s/commit/14a7a18304a3919f8d3fe8e62dd8004931b0ca51))
+
 ## [1.3.0](https://github.com/armandwipangestu/belajar-k8s/compare/v1.2.0...v1.3.0) (2026-03-10)
 
 ### ✨ Features
