@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: complete-probes
+  labels:
+    app: web-app
+spec:
+  containers:
+    - name: app
+      image: nginx
+      ports:
+        - containerPort: 80
+      # Startup Probe - for slow-starting application
+      startupProbe:
+        httpGet:
+          path: /healthz
+          port: 80
+        initialDelaySeconds: 0
+        periodSeconds: 10
+        failureThreshold: 30 # 5 minutes for start
+      # Liveness Probe - restart if unhealthy
+      livenessProbe:
+        httpGet:
+          path: /healthz
+          port: 80
+        initialDelaySeconds: 0
+        periodSeconds: 10
+        timeoutSeconds: 5
+        failureThreshold: 3
+      # Readiness Probe - remove from load balancer if not ready
+      readinessProbe:
+        httpGet:
+          path: /ready
+          port: 80
+        initialDelaySeconds: 0
+        periodSeconds: 5
+        timeoutSeconds: 3
+        failureThreshold: 3

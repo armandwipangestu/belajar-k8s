@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: exec-probe-demo
+spec:
+  containers:
+    - name: app
+      image: busybox
+      command:
+        - /bin/sh
+        - -c
+        - |
+          mkdir -p /usr/local/bin
+
+          # Create health check script
+          cat > /usr/local/bin/health-check.sh << 'EOF'
+          #!/bin/sh
+          # Custom health check logic
+          if [ -f /tmp/healthy ]; then
+            exit 0
+          else
+            exit 1
+          fi
+          EOF
+          chmod +x /usr/local/bin/health-check.sh
+
+          # Keep container still running and create healthy file
+          touch /tmp/healthy
+          sleep 3600
+      livenessProbe:
+        exec:
+          command:
+            - /usr/local/bin/health-check.sh
+        initialDelaySeconds: 5
+        periodSeconds: 10
