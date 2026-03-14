@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: complex-selector-rs
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-app
+    matchExpressions:
+      - key: environment
+        operator: In
+        values:
+          - production
+          - staging
+      - key: tier
+        operator: NotIn
+        values:
+          - deprecated
+  template:
+    metadata:
+      labels:
+        app: web-app
+        environment: production
+        tier: frontend
+    spec:
+      containers:
+        - name: web-app
+          image: nginx

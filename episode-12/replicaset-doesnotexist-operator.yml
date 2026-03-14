@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: unlabeled-rs
+spec:
+  replicas: 2
+  selector:
+    matchExpressions:
+      - key: deprecated
+        operator: DoesNotExist
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: myapp
+          image: nginx

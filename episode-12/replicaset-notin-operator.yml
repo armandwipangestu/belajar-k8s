@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: non-dev-rs
+spec:
+  replicas: 3
+  selector:
+    matchExpressions:
+      - key: environment
+        operator: NotIn
+        values:
+          - development
+  template:
+    metadata:
+      labels:
+        app: myapp
+        environment: production
+    spec:
+      containers:
+        - name: web-app
+          image: nginx

@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: labeled-rs
+spec:
+  replicas: 3
+  selector:
+    matchExpressions:
+      - key: tier
+        operator: Exists
+  template:
+    metadata:
+      labels:
+        app: myapp
+        tier: frontend
+    spec:
+      containers:
+        - name: myapp
+          image: nginx
