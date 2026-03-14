@@ -1,3 +1,9 @@
+## [1.5.0](https://github.com/armandwipangestu/belajar-k8s/compare/v1.4.0...v1.5.0) (2026-03-14)
+
+### ✨ Features
+
+* add episode-11 manifest file ([ae24496](https://github.com/armandwipangestu/belajar-k8s/commit/ae244962b790ffeef1f1ba13d26381d4c0b784fe))
+
 ## [1.4.0](https://github.com/armandwipangestu/belajar-k8s/compare/v1.3.1...v1.4.0) (2026-03-13)
 
 ### ✨ Features
