@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: web-app-rc
+  labels:
+    app: web-app
+    tier: frontend
+spec:
+  replicas: 5
+  selector:
+    app: web-app
+    tier: frontend
+  template:
+    metadata:
+      labels:
+        app: web-app
+        tier: frontend
+    spec:
+      containers:
+        - name: web-app
+          image: nginx:1.25
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
