@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: multi-env-rs
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: myapp
+    matchExpressions:
+      - key: environment
+        operator: In
+        values:
+          - production
+          - staging
+      - key: version
+        operator: Exists
+  template:
+    metadata:
+      labels:
+        app: myapp
+        environment: production
+        version: v2.0
+    spec:
+      containers:
+        - name: myapp
+          image: nginx
+          env:
+            - name: ENVIRONMENT
+              value: "production"
+            - name: VERSION
+              value: "v2.0"
