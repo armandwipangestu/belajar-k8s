@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: kube-proxy
+  namespace: kube-system
+  labels:
+    k8s-app: kube-proxy
+spec:
+  selector:
+    matchLabels:
+      k8s-app: kube-proxy
+  template:
+    metadata:
+      labels:
+        k8s-app: kube-proxy
+    spec:
+      priorityClassName: system-node-critical
+      hostNetwork: true
+      tolerations:
+        - operator: Exists
+          effect: NoSchedule
+      containers:
+        - name: kube-proxy
+          image: registry.k8s.io/kube-proxy:v1.28.0
+          command:
+            - /usr/local/bin/kube-proxy
+            - --config=/var/lib/kube-proxy/config.conf
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: kube-proxy
+              mountPath: /var/lib/kube-proxy
+      volumes:
+        - name: kube-proxy
+          configMap:
+            name: kube-proxy
