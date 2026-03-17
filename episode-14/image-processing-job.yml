@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: image-processor
+spec:
+  completions: 100
+  parallelism: 10
+  template:
+    spec:
+      containers:
+        - name: processor
+          image: imagemagick:latest
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "Processing image..."
+              convert input.jpg -resize 800x600 output.jpg
+              echo "Image processed successfully."
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"
+      restartPolicy: Never
