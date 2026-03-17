@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: production-monitor
+spec:
+  selector:
+    matchLabels:
+      app: prod-monitor
+  template:
+    metadata:
+      labels:
+        app: prod-monitor
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: environment
+                    operator: In
+                    values:
+                      - production
+                      - staging
+      containers:
+        - name: monitor
+          image: nginx
