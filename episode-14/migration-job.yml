@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-migration
+  labels:
+    app: database
+    task: migration
+spec:
+  backoffLimit: 2
+  activeDeadlineSeconds: 300
+  template:
+    metadata:
+      labels:
+        app: database
+        task: migration
+    spec:
+      containers:
+        - name: migrate
+          image: migrate/migrate:v4.16.2
+          command:
+            - migrate
+            - -path=/migrations
+            - -database=postgres://user:pass@db:5432/mydb?sslmode=disable
+            - up
+          volumeMounts:
+            - name: migrations
+              mountPath: /migrations
+      volumes:
+        - name: migrations
+          configMap:
+            name: db-migrations
+      restartPolicy: Never

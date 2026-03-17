@@ -1,0 +1,13 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cleanup-job
+spec:
+  ttlSecondsAfterFinished: 20
+  template:
+    spec:
+      containers:
+        - name: task
+          image: busybox
+          command: ["echo", "Task completed!"]
+      restartPolicy: Never

@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: data-processor
+spec:
+  completions: 10
+  parallelism: 3
+  template:
+    spec:
+      containers:
+        - name: processor
+          image: python:3.11-slim
+          command:
+            - python
+            - -c
+            - |
+              import time
+              import random
+
+              print("Processing data batch...")
+              time.sleep(random.randint(5, 15))
+              print("Batch processing completed!")
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      restartPolicy: Never
