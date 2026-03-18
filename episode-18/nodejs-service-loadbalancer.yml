@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs-loadbalancer
+spec:
+  type: LoadBalancer
+  selector:
+    app: nodejs-lb
+  ports:
+    - protocol: TCP
+      port: 30031
+      targetPort: 3000

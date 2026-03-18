@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-lb-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nodejs-lb
+  template:
+    metadata:
+      labels:
+        app: nodejs-lb
+    spec:
+      containers:
+        - name: nodejs-lb
+          image: ghcr.io/armandwipangestu/app-hostname:1.0.0
+          ports:
+            - containerPort: 3000

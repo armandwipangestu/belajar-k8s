@@ -1,0 +1,38 @@
+# Frontend Service (LoadBalancer untuk external access)
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  type: LoadBalancer
+  selector:
+    app: frontend
+  ports:
+    - port: 80
+      targetPort: 3000
+---
+# Backend Service (ClusterIP untuk internal access)
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  type: ClusterIP
+  selector:
+    app: backend
+  ports:
+    - port: 8080
+      targetPort: 8080
+---
+# Database Service (Headless untuk StatefulSet)
+apiVersion: v1
+kind: Service
+metadata:
+  name: database
+spec:
+  clusterIP: None
+  selector:
+    app: database
+  ports:
+    - port: 5432
+      targetPort: 5432

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-pod
+  labels:
+    app: web
+spec:
+  containers:
+    - name: web
+      image: nginx:1.25
+      ports:
+        - name: http
+          containerPort: 80
+        - name: metrics
+          containerPort: 9090
