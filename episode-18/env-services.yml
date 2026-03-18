@@ -1,0 +1,27 @@
+# Production Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+  namespace: production
+spec:
+  selector:
+    app: api
+    environment: production
+  ports:
+    - port: 80
+      targetPort: 8080
+---
+# Staging Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+  namespace: staging
+spec:
+  selector:
+    app: api
+    environment: staging
+  ports:
+    - port: 80
+      targetPort: 8080
