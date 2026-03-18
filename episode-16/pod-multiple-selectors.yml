@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-development
+spec:
+  containers:
+    - name: app
+      image: nginx
+  nodeSelector:
+    disktype: ssd
+    environment: development

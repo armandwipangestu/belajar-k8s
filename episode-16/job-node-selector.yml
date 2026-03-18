@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: data-processor
+spec:
+  template:
+    spec:
+      containers:
+        - name: processor
+          image: data-processor:latest
+          resources:
+            requests:
+              memory: "5Gi"
+              cpu: "2000m"
+      nodeSelector:
+        workload: batch-processing
+        memory: high
+      restartPolicy: Never

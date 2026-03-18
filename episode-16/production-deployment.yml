@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-production
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: api
+      env: prod
+  template:
+    metadata:
+      labels:
+        app: api
+        env: prod
+    spec:
+      containers:
+        - name: api
+          image: api:v2.0
+      nodeSelector:
+        environment: production
