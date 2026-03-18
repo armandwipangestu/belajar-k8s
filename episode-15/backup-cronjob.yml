@@ -1,0 +1,57 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: database-backup
+  labels:
+    app: backup
+    type: database
+spec:
+  schedule: "0 2 * * *"
+  timeZone: "UTC"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 7
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 3600
+      template:
+        metadata:
+          labels:
+            app: backup
+            type: database
+        spec:
+          containers:
+            - name: backup
+              image: postgres:15-alpine
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  BACKUP_FILE="/backup/db-backup-$(date +%Y%m%d-%H%M%S).sql"
+                  pg_dump -h $DB_HOST -U $DB_USER -d $DB_NAME > $BACKUP_FILE
+                  gzip $BACKUP_FILE
+                  echo "Backup completed: ${BACKUP_FILE}.gz"
+              env:
+                - name: DB_HOST
+                  value: "postgres-service"
+                - name: DB_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: db-credentials
+                      key: username
+                - name: DB_NAME
+                  value: "production"
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: db-credentials
+                      key: password
+              volumeMounts:
+                - name: backup-storage
+                  mountPath: /backup
+      volumes:
+        - name: backup-storage
+          persistentVolumeClaim:
+            claimName: backup-pvc
+      restartPolicy: OnFailure

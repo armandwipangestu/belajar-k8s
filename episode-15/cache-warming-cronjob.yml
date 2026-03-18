@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cache-warmer
+spec:
+  schedule: "0 6 * * *"
+  concurrencyPolicy: Replace
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 1800
+      template:
+        spec:
+          containers:
+            - name: warmer
+              image: curlimages/curl:latest
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  echo "Warming cache..."
+                  curl -s http://api-service/api/warm-cache
+                  echo "Cache warmed successfully"
+          restartPolicy: OnFailure

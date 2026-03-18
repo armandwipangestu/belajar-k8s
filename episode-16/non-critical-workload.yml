@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: background-jobs
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: jobs
+  template:
+    metadata:
+      labels:
+        app: jobs
+    spec:
+      containers:
+        - name: worker
+          image: job-worker:latest
+      nodeSelector:
+        cost: standard

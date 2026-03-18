@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: timezone-cronjob
+spec:
+  schedule: "0 9 * * *"
+  timeZone: "America/New_York"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: task
+              image: busybox
+              command: ["echo", "Good morning!"]
+          restartPolicy: OnFailure

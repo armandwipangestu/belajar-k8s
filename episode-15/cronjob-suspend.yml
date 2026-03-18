@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: suspended-cronjob
+spec:
+  schedule: "*/1 * * * *"
+  suspend: true
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: task
+              image: busybox
+              command: ["echo", "Task completed!"]
+          restartPolicy: OnFailure

@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: deadline-cronjob
+spec:
+  schedule: "0 2 * * *"
+  startingDeadlineSeconds: 3600
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: deadline-job
+              image: busybox
+              command: ["echo", "Task completed"]
+          restartPolicy: OnFailure

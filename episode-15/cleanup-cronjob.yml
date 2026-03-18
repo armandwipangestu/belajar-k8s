@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: log-cleanup
+spec:
+  schedule: "0 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: cleanup
+              image: busybox
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  echo "Starting log cleanup..."
+                  find /logs -name "*.log" -mtime +7 -delete
+                  echo "Cleanup completed"
+              volumeMounts:
+                - name: logs
+                  mountPath: /logs
+          volumes:
+            - name: logs
+              hostPath:
+                path: /var/log/app
+          restartPolicy: OnFailure

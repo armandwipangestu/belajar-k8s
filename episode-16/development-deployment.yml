@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-development
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api
+      env: dev
+  template:
+    metadata:
+      labels:
+        app: api
+        env: dev
+    spec:
+      containers:
+        - name: api
+          image: api:dev
+      nodeSelector:
+        environment: development
