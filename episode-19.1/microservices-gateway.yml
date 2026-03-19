@@ -1,0 +1,80 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: microservices-gateway
+spec:
+  gatewayClassName: nginx
+  listeners:
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: "*.example.com"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: wildcard-tls
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: api-routes
+spec:
+  parentRefs:
+    - name: microservices-gateway
+  hostnames:
+    - "api.example.com"
+  rules:
+    # User service dengan canary
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /users
+      backendRefs:
+        - name: user-service-stable
+          port: 8080
+          weight: 90
+        - name: user-service-canary
+          port: 8080
+          weight: 10
+    # Order service dengan header routing
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /orders
+          headers:
+            - name: X-API-Version
+              value: v2
+      backendRefs:
+        - name: order-service-v2
+          port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /orders
+      backendRefs:
+        - name: order-service-v1
+          port: 8080
+    # Product service dengan timeout
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /products
+      timeouts:
+        request: 10s
+      backendRefs:
+        - name: product-service
+          port: 8080
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: web-routes
+spec:
+  parentRefs:
+    - name: microservices-gateway
+  hostnames:
+    - "web.example.com"
+  rules:
+    - backendRefs:
+        - name: frontend-service
+          port: 3000

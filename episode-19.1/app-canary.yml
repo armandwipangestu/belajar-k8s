@@ -1,0 +1,109 @@
+# ================================
+# Alpha Service
+# ================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpha-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: alpha-service
+  template:
+    metadata:
+      labels:
+        app: alpha-service
+    spec:
+      containers:
+        - name: alpha-service
+          image: ghcr.io/armandwipangestu/alpha-service:1.0.1
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: alpha-service
+spec:
+  selector:
+    app: alpha-service
+  ports:
+    - port: 80
+      targetPort: 3000
+---
+# ================================
+# Beta Service
+# ================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beta-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: beta-service
+  template:
+    metadata:
+      labels:
+        app: beta-service
+    spec:
+      containers:
+        - name: beta-service
+          image: ghcr.io/armandwipangestu/beta-service:1.0.1
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: beta-service
+spec:
+  selector:
+    app: beta-service
+  ports:
+    - port: 80
+      targetPort: 3000
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: canary-gateway
+spec:
+  gatewayClassName: traefik
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 8000
+      hostname: "*.example.com"
+
+    - name: https
+      protocol: HTTPS
+      port: 8443
+      hostname: "*.example.com"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: example-tls
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: canary-route
+spec:
+  parentRefs:
+    - name: canary-gateway
+      sectionName: https
+    - name: canary-gateway
+      sectionName: http
+  hostnames:
+    - "canary.example.com"
+  rules:
+    - backendRefs:
+        - name: alpha-service
+          port: 80
+          weight: 90
+        - name: beta-service
+          port: 80
+          weight: 10
