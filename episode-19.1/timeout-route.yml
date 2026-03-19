@@ -1,0 +1,14 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: timeout-route
+spec:
+  parentRefs:
+    - name: example-gateway
+  rules:
+    - timeouts:
+        request: 30s
+        backendRequest: 25s
+      backendRefs:
+        - name: slow-service
+          port: 8080

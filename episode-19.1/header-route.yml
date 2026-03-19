@@ -1,0 +1,22 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: header-route
+spec:
+  parentRefs:
+    - name: example-gateway
+  rules:
+    - matches:
+        - headers:
+            - name: X-API-Version
+              value: v2
+      backendRefs:
+        - name: api-v2-service
+          port: 8080
+    - matches:
+        - headers:
+            - name: X-API-Version
+              value: v1
+      backendRefs:
+        - name: api-v1-service
+          port: 8080

@@ -1,0 +1,54 @@
+# ================================
+# Web Service
+# ================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-service
+  template:
+    metadata:
+      labels:
+        app: web-service
+    spec:
+      containers:
+        - name: web-service
+          image: ghcr.io/armandwipangestu/web-service:1.0.1
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+spec:
+  selector:
+    app: web-service
+  ports:
+    - port: 80
+      targetPort: 3000
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: web-service
+spec:
+  parentRefs:
+    - name: web-gateway
+      sectionName: https
+    - name: web-gateway
+      sectionName: http
+  hostnames:
+    - "web.example.com"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: web-service
+          port: 80
