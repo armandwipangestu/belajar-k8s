@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: env-pod
+spec:
+  containers:
+    - name: app
+      image: nginx:1.25
+      env:
+        - name: APP_PORT
+          value: "80"
+    - name: sidecar
+      image: busybox:1.36
+      env:
+        - name: APP_PORT
+          value: "80"

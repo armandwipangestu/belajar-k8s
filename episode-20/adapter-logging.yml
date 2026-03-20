@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-with-log-adapter
+spec:
+  containers:
+    # Main application (write custom log format)
+    - name: application
+      image: legacy-app:latest
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+    # Adapter untuk convert log ke standard format
+    - name: log-adapter
+      image: log-transformer:latest
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+        - name: transformed-logs
+          mountPath: /var/log/transformed
+      command:
+        - sh
+        - -c
+        - |
+          while true; do
+            if [ -f /var/log/app/app.log ]; then
+              tail -f /var/log/app/app.log | \
+              awk '{print "{\"timestamp\":\""$1"\",\"level\":\""$2"\",\"message\":\""$3"\"}"}' \
+              > /var/log/transformed/app.json
+            fi
+            sleep 1
+          done
+  volumes:
+    - name: logs
+      emptyDir: {}
+    - name: transformed-logs
+      emptyDir: {}

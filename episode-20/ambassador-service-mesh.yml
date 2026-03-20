@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-with-proxy
+spec:
+  containers:
+    # Main application
+    - name: application
+      image: myapp:latest
+      ports:
+        - containerPort: 8080
+    # Envoy proxy ambassador
+    - name: envoy-proxy
+      image: envoyproxy/envoy:v1.28
+      ports:
+        - containerPort: 9901
+      volumeMounts:
+        - name: envoy-config
+          mountPath: /etc/envoy
+  volumes:
+    - name: envoy-config
+      configMap:
+        name: envoy-configuration

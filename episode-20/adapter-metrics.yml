@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-with-metrics-adapter
+spec:
+  containers:
+    # Application expose custom metrics
+    - name: application
+      image: myapp:latest
+      ports:
+        - containerPort: 8080
+    # Adapter untuk convert ke Prometheus format
+    - name: metrics-adapter
+      image: metrics-converter:latest
+      ports:
+        - containerPort: 9090
+      env:
+        - name: SOURCE_METRICS_URL
+          value: "http://localhost:8080/stats"
+        - name: TARGET_FORMAT
+          value: "prometheus"
