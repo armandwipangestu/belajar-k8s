@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-with-git-sync
+spec:
+  initContainers:
+    # Clone repository initially
+    - name: git-clone
+      image: alpine/git:latest
+      command:
+        - git
+        - clone
+        - https://github.com/user/repo.git
+        - /git
+      volumeMounts:
+        - name: git-repo
+          mountPath: /git
+  containers:
+    # Web server serving git content
+    - name: nginx
+      image: nginx:1.25
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - name: git-repo
+          mountPath: /usr/share/nginx/html
+    # Git sync sidecar
+    - name: git-sync
+      image: k8s.gcr.io/git-sync:v3.6.3
+      env:
+        - name: GIT_SYNC_REPO
+          value: "https://github.com/user/repo.git"
+        - name: GIT_SYNC_DEST
+          value: "repo"
+        - name: GIT_SYNC_WAIT
+          value: "60"
+      volumeMounts:
+        - name: git-repo
+          mountPath: /tmp/git
+  volumes:
+    - name: git-repo
+      emptyDir: {}

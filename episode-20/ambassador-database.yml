@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-with-db-ambassador
+spec:
+  containers:
+    # Main application
+    - name: application
+      image: myapp:latest
+      env:
+        - name: DATABASE_HOST
+          value: "localhost"
+        - name: DATABASE_PORT
+          value: "5432"
+    # Ambassador untuk database connection
+    - name: db-ambassador
+      image: haproxy:2.8
+      ports:
+        - containerPort: 5432
+      volumeMounts:
+        - name: config
+          mountPath: /usr/local/etc/haproxy
+  volumes:
+    - name: config
+      configMap:
+        name: haproxy-config
