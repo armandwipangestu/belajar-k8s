@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-hostpath
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hostpath
+  template:
+    metadata:
+      labels:
+        app: hostpath
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: host-data
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: host-data
+          hostPath:
+            path: /data/web
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-hostpath-service
+spec:
+  selector:
+    app: hostpath
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30007

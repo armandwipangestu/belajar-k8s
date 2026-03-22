@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: downwardapi-pod
+  labels:
+    app: myapp
+    version: v1.0
+spec:
+  containers:
+    - name: app
+      image: busybox:1.36
+      command:
+        - sh
+        - -c
+        - while true; do cat /etc/podinfo/*; sleep 10; done
+      volumeMounts:
+        - name: podinfo
+          mountPath: /etc/podinfo
+  volumes:
+    - name: podinfo
+      downwardAPI:
+        items:
+          - path: name
+            fieldRef:
+              fieldPath: metadata.name
+          - path: namespace
+            fieldRef:
+              fieldPath: metadata.namespace
+          - path: labels
+            fieldRef:
+              fieldPath: metadata.labels

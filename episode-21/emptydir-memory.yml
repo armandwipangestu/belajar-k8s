@@ -1,0 +1,5 @@
+volumes:
+  - name: cache
+    emptyDir:
+      medium: Memory
+      sizeLimit: 128Mi

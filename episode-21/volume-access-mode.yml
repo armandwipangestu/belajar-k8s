@@ -1,0 +1,5 @@
+accessModes:
+  - ReadWriteOnce # (RWO) Volume can be mount read-write just from single node, common for block storage (AWS EBS, GCE PD)
+  - ReadOnlyMany # (ROX) Volume can be mount read-only from many node, useful for shared configuration or static content
+  - ReadWriteMany # (RWX) Volume can be mount read-write from many node, require network filesytem (NFS, CephFS, GlusterFS)
+  - ReadWriteOncePod # (RWOP) Volume can be mount read-write from single Pod.
