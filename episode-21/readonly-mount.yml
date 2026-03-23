@@ -1,0 +1,4 @@
+volumeMounts:
+  - name: config
+    mountPath: /etc/config
+    readOnly: true

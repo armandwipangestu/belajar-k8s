@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  app.conf: |
+    server {
+        listen 80;
+        server_name localhost;
+    }
+  database.conf: |
+    host=db.example.com
+    port=5432
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: configmap-pod
+spec:
+  containers:
+    - name: app
+      image: nginx:1.25
+      volumeMounts:
+        - name: config
+          mountPath: /etc/config
+  volumes:
+    - name: config
+      configMap:
+        name: app-config

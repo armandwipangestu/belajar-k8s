@@ -1,0 +1,7 @@
+volumes:
+  - name: config
+    configMap:
+      name: app-config
+      items:
+        - key: app.conf
+          path: nginx.conf

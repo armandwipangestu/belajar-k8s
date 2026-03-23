@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multi-volume-app
+spec:
+  containers:
+    - name: app
+      image: myapp:latest
+      volumeMounts:
+        # Application config from ConfigMap
+        - name: config
+          mountPath: /etc/app/config
+          readOnly: true
+        # Database credential from Secret
+        - name: secrets
+          mountPath: /etc/app/secrets
+          readOnly: true
+        # Persistent data storage
+        - name: data
+          mountPath: /var/lib/app
+        # Temporary cache
+        - name: cache
+          mountPath: /tmp/cache
+        # Log shared dengan sidecar
+        - name: logs
+          mountPath: /var/log/app
+    - name: log-shipper
+      image: fluent/fluentd:v1.16
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+          readOnly: true
+  volumes:
+    - name: config
+      configMap:
+        name: app-config
+    - name: secrets
+      secret:
+        secretName: app-secrets
+    - name: data
+      persistentVolumeClaim:
+        claimName: app-data-pvc
+    - name: cache
+      emptyDir:
+        medium: Memory
+        sizeLimit: 256Mi
+    - name: logs
+      emptyDir: {}
