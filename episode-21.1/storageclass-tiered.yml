@@ -1,0 +1,23 @@
+# High-performance SSD for database
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fast-ssd
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "false"
+provisioner: ebs.csi.aws.com
+parameters:
+  type: gp3
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+---
+# Standard HDD for backup/log
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: standard-hdd
+provisioner: ebs.csi.aws.com
+parameters:
+  type: st1
+reclaimPolicy: Delete
+allowVolumeExpansion: true

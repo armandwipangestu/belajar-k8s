@@ -1,0 +1,15 @@
+# Database single-node (MySQL, PostgreSQL)
+accessModes:
+    - ReadWriteOnce
+ 
+# Config or static asset that can be read together
+accessModes:
+    - ReadOnlyMany
+ 
+# Shared writable storage (NFS, CephFS)
+accessModes:
+    - ReadWriteMany
+ 
+# Guarantee strict only to one Pod
+accessModes:
+    - ReadWriteOncePod
