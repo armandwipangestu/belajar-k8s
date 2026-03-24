@@ -1,0 +1,55 @@
+# PVC for shared configuration
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: config-pvc
+spec:
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: 1Gi
+---
+# Config manager (write config)
+apiVersion: v1
+kind: Pod
+metadata:
+  name: config-manager
+spec:
+  containers:
+    - name: manager
+      image: config-manager:latest
+      volumeMounts:
+        - name: config
+          mountPath: /config
+  volumes:
+    - name: config
+      persistentVolumeClaim:
+        claimName: config-pvc
+---
+# Application (read config)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: app
+          image: myapp:latest
+          volumeMounts:
+            - name: config
+              mountPath: /etc/app/config
+              readOnly: true
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: config-pvc
