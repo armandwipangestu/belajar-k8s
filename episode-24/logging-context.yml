@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: logging-pod
+  labels:
+    app: logger
+    environment: production
+spec:
+  containers:
+    - name: app
+      image: myapp:latest
+      env:
+        # Pod context for structured logging
+        - name: LOG_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: LOG_POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: LOG_POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: LOG_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: LOG_ENVIRONMENT
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['environment']
+      # Application used this for structured log
+      # Example log: {"level":"info","pod":"logging-pod","namespace":"default","node":"node-1","message":"Started"}

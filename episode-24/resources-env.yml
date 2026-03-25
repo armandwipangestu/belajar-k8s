@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: resources-env-pod
+spec:
+  containers:
+    - name: app
+      image: busybox:1.36
+      command:
+        - sh
+        - -c
+        - |
+          echo "Memory Request: $MEMORY_REQUEST"
+          echo "Memory Limit: $MEMORY_LIMIT"
+          echo "CPU Request: $CPU_REQUEST"
+          echo "CPU Limit: $CPU_LIMIT"
+          echo "Storage Request: $STORAGE_REQUEST"
+          echo "Storage Limit: $STORAGE_LIMIT"
+          sleep 3600
+      resources:
+        requests:
+          memory: "256Mi"
+          cpu: "250m"
+          ephemeral-storage: "1Gi"
+        limits:
+          memory: "512Mi"
+          cpu: "500m"
+          ephemeral-storage: "2Gi"
+      env:
+        # Memory resource
+        - name: MEMORY_REQUEST
+          valueFrom:
+            resourceFieldRef:
+              containerName: app
+              resource: requests.memory
+        - name: MEMORY_LIMIT
+          valueFrom:
+            resourceFieldRef:
+              containerName: app
+              resource: limits.memory
+        # CPU resource
+        - name: CPU_REQUEST
+          valueFrom:
+            resourceFieldRef:
+              containerName: app
+              resource: requests.cpu
+              # Return exact value in milicore
+              divisor: "1m"
+        - name: CPU_LIMIT
+          valueFrom:
+            resourceFieldRef:
+              containerName: app
+              resource: limits.cpu
+              # Return exact value in milicore
+              divisor: "1m"
+        # Storage resource
+        - name: STORAGE_REQUEST
+          valueFrom:
+            resourceFieldRef:
+              containerName: app
+              resource: requests.ephemeral-storage
+        - name: STORAGE_LIMIT
+          valueFrom:
+            resourceFieldRef:
+              containerName: app
+              resource: limits.ephemeral-storage

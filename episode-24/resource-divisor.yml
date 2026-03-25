@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: divisor-pod
+spec:
+  containers:
+    - name: app
+      image: busybox:1.36
+      command:
+        - sh
+        - -c
+        - |
+          echo "Memory Limit Bytes: $MEMORY_LIMIT_BYTES"
+          echo "Memory Limit MB: $MEMORY_LIMIT_MB"
+          echo "CPU Limit Milicores: $CPU_LIMIT_MILLICORES"
+          echo "CPU Limit Cores: $CPU_LIMIT_CORES"
+          sleep 3600
+      resources:
+        requests:
+          memory: "256Mi"
+          cpu: "250m"
+        limits:
+          memory: "512Mi"
+          cpu: "500m"
+      env:
+        # Memory in byte (default)
+        - name: MEMORY_LIMIT_BYTES
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.memory
+        # Memory in megabyte
+        - name: MEMORY_LIMIT_MB
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.memory
+              divisor: 1Mi
+        # CPU in millicore (default)
+        - name: CPU_LIMIT_MILLICORES
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.cpu
+              divisor: "1m"
+        # CPU in core
+        - name: CPU_LIMIT_CORES
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.cpu
+              divisor: "1"

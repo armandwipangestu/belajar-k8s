@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: complete-metadata-pod
+  labels:
+    app: myapp
+    version: v1.0
+    tier: backend
+    environment: production
+  annotations:
+    description: "Production application"
+    owner: "platform-team"
+    contact: "team@example.com"
+spec:
+  containers:
+    - name: app
+      image: nginx:1.25
+      volumeMounts:
+        - name: podinfo
+          mountPath: /etc/podinfo
+  volumes:
+    - name: podinfo
+      downwardAPI:
+        items:
+          - path: "pod-name"
+            fieldRef:
+              fieldPath: metadata.name
+          - path: "pod-namespace"
+            fieldRef:
+              fieldPath: metadata.namespace
+          - path: "pod-ip"
+            fieldRef:
+              fieldPath: status.podIP
+          - path: "node-name"
+            fieldRef:
+              fieldPath: spec.nodeName
+          - path: "service-account"
+            fieldRef:
+              fieldPath: spec.serviceAccountName
+          - path: "labels"
+            fieldRef:
+              fieldPath: metadata.labels
+          - path: "annotations"
+            fieldRef:
+              fieldPath: metadata.annotations
