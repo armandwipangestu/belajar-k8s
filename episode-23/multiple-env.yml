@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-pod
+spec:
+  containers:
+    - name: app
+      image: myapp:latest
+      env:
+        - name: APP_NAME
+          value: "MyApplication"
+        - name: APP_VERSION
+          value: "1.0.0"
+        - name: DATABASE_HOST
+          value: "db.example.com"
+        - name: DATABASE_PORT
+          value: "5432"
+        - name: CACHE_ENABLED
+          value: "true"
+        - name: CACHE_TTL
+          value: "3600"
