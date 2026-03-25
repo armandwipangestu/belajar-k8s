@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-config
+data:
+  APP_NAME: "MyWebApp"
+  APP_ENV: "production"
+  LOG_LEVEL: "info"
+  SESSION_TIMEOUT: "3600"
+  MAX_UPLOAD_SIZE: "10485760"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: web-secrets
+type: Opaque
+stringData:
+  JWT_SECRET: "your-jwt-secret-key"
+  ENCRYPTION_KEY: "your-encryption-key"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: web
+          image: mywebapp:latest
+          ports:
+            - containerPort: 8080
+          env:
+            # Pod metadata
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            # Secret
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: web-secrets
+                  key: JWT_SECRET
+            - name: ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: web-secrets
+                  key: ENCRYPTION_KEY
+          # Import semua ConfigMap
+          envFrom:
+            - configMapRef:
+                name: web-config

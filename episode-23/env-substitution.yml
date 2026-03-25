@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: substitution-pod
+spec:
+  containers:
+    - name: app
+      image: myapp:latest
+      env:
+        - name: DB_HOST
+          value: "postgres.example.com"
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_NAME
+          value: "myapp"
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: password
+        # Compose connection string used another variable
+        - name: DATABASE_URL
+          value: "postgresql://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=require"

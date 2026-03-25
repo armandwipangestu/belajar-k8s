@@ -1,0 +1,69 @@
+# Development ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config-dev
+  namespace: development
+data:
+  ENVIRONMENT: "development"
+  LOG_LEVEL: "debug"
+  DEBUG_MODE: "true"
+  API_URL: "https://api-dev.example.com"
+---
+# Production ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config-prod
+  namespace: production
+data:
+  ENVIRONMENT: "production"
+  LOG_LEVEL: "warn"
+  DEBUG_MODE: "false"
+  API_URL: "https://api.example.com"
+---
+# Development Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  namespace: development
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: app
+          image: myapp:latest
+          envFrom:
+            - configMapRef:
+                name: app-config-dev
+---
+# Production Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  namespace: production
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: app
+          image: myapp:latest
+          envFrom:
+            - configMapRef:
+                name: app-config-prod

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  DATABASE_HOST: "db.example.com"
+  DATABASE_PORT: "5432"
+  CACHE_ENABLED: "true"
+  LOG_LEVEL: "info"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: envfrom-pod
+spec:
+  containers:
+    - name: app
+      image: myapp:latest
+      envFrom:
+        - configMapRef:
+            name: app-config
