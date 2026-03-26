@@ -1,0 +1,54 @@
+# Blue deployment (current)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-blue
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+      version: blue
+  template:
+    metadata:
+      labels:
+        app: myapp
+        version: blue
+    spec:
+      containers:
+        - name: app
+          image: myapp:1.0
+---
+# Green deployment (new)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-green
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+      version: green
+  template:
+    metadata:
+      labels:
+        app: myapp
+        version: green
+    spec:
+      containers:
+        - name: app
+          image: myapp:2.0
+---
+# Service (switch between blue and green)
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+spec:
+  selector:
+    app: myapp
+    version: blue # Change to 'green' for switch
+  ports:
+    - port: 80
+      targetPort: 8080

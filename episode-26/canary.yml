@@ -1,0 +1,53 @@
+# Stable deployment (90% traffic)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-stable
+spec:
+  replicas: 9
+  selector:
+    matchLabels:
+      app: myapp
+      track: stable
+  template:
+    metadata:
+      labels:
+        app: myapp
+        track: stable
+    spec:
+      containers:
+        - name: app
+          image: myapp:1.0
+---
+# Canary deployment (10% traffic)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+      track: canary
+  template:
+    metadata:
+      labels:
+        app: myapp
+        track: canary
+    spec:
+      containers:
+        - name: app
+          image: myapp:2.0
+---
+# Service (route to both)
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+spec:
+  selector:
+    app: myapp # Match both stable and canary
+  ports:
+    - port: 80
+      targetPort: 8080
