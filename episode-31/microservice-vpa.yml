@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+        - name: api
+          image: myapi:latest
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+        - name: log-agent
+          image: fluent/fluentd:v1.16
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: api-service-vpa
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: api-service
+  updatePolicy:
+    updateMode: "Auto"
+  resourcePolicy:
+    containerPolicies:
+      - containerName: "api"
+        mode: "Auto"
+        minAllowed:
+          cpu: "100m"
+          memory: "128Mi"
+        maxAllowed:
+          cpu: "2000m"
+          memory: "2Gi"
+      - containerName: "log-agent"
+        mode: "Auto"
+        minAllowed:
+          cpu: "25m"
+          memory: "32Mi"
+        maxAllowed:
+          cpu: "200m"
+          memory: "256Mi"
