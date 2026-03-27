@@ -1,0 +1,27 @@
+[ req ]
+default_bits       = 2048
+distinguished_name = req_distinguished_name
+req_extensions     = req_ext
+x509_extensions    = v3_ext
+prompt             = no
+
+[ req_distinguished_name ]
+C  = ID
+ST = Jawa Barat
+L  = Bandung
+O  = Kubernetes
+OU = Dashboard
+CN = kubernetes-dashboard.home.internal
+
+[ req_ext ]
+subjectAltName = @alt_names
+
+[ v3_ext ]
+subjectAltName = @alt_names
+keyUsage = digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth
+
+[ alt_names ]
+DNS.1 = kubernetes-dashboard.home.internal
+DNS.2 = kubernetes-dashboard.kubernetes-dashboard.svc
+DNS.3 = kubernetes-dashboard.kubernetes-dashboard.svc.cluster.local
