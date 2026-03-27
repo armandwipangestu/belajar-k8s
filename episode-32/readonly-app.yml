@@ -1,0 +1,53 @@
+# ServiceAccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: readonly-app
+  namespace: production
+---
+# Role - Read pod and service
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: readonly-role
+  namespace: production
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services"]
+    verbs: ["get", "list", "watch"]
+---
+# RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: readonly-binding
+  namespace: production
+subjects:
+  - kind: ServiceAccount
+    name: readonly-app
+    namespace: production
+roleRef:
+  kind: Role
+  name: readonly-role
+  apiGroup: rbac.authorization.k8s.io
+---
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: readonly-app
+  namespace: production
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: readonly-app
+  template:
+    metadata:
+      labels:
+        app: readonly-app
+    spec:
+      serviceAccountName: readonly-app
+      containers:
+        - name: app
+          image: myapp:latest

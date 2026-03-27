@@ -1,0 +1,50 @@
+# ServiceAccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: backup-job-sa
+  namespace: default
+---
+# Role - Access to backup resource
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: backup-role
+  namespace: default
+rules:
+  - apiGroups: [""]
+    resources: ["persistentvolumeclaims"]
+    verbs: ["get", "list"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "create"]
+---
+# RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: backup-binding
+  namespace: default
+subjects:
+  - kind: ServiceAccount
+    name: backup-job-sa
+    namespace: default
+roleRef:
+  kind: Role
+  name: backup-role
+  apiGroup: rbac.authorization.k8s.io
+---
+# Job
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: backup-job
+spec:
+  template:
+    spec:
+      serviceAccountName: backup-job-sa
+      containers:
+        - name: backup
+          image: backup-tool:latest
+          command: ["./backup.sh"]
+      restartPolicy: OnFailure
