@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: seccomp-custom
+spec:
+  securityContext:
+    seccompProfile:
+      type: Localhost
+      localhostProfile: my-profile.json
+  containers:
+    - name: app
+      image: myapp:latest

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: drop-caps
+spec:
+  containers:
+    - name: app
+      image: myapp:latest
+      securityContext:
+        capabilities:
+          drop:
+            - ALL
