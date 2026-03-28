@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: team-a-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: team-a-app
+  template:
+    metadata:
+      labels:
+        app: team-a-app
+    spec:
+      tolerations:
+        - key: team
+          operator: Equal
+          value: a
+          effect: NoSchedule
+      containers:
+        - name: app
+          image: team-a-app:latest

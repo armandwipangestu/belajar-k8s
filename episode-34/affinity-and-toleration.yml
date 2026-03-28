@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: placed-pod
+spec:
+  # Tolerate taint
+  tolerations:
+    - key: gpu
+      operator: Equal
+      value: "true"
+      effect: NoSchedule
+  # Prefer GPU node
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          preference:
+            matchExpressions:
+              - key: gpu
+                operator: In
+                values:
+                  - "true"
+  containers:
+    - name: app
+      image: gpu-app:latest

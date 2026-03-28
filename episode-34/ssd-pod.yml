@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database
+  template:
+    metadata:
+      labels:
+        app: database
+    spec:
+      tolerations:
+        - key: storage
+          operator: Equal
+          value: ssd
+          effect: NoSchedule
+      containers:
+        - name: postgres
+          image: postgres:15
