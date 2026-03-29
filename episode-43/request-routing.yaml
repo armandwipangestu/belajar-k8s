@@ -1,0 +1,26 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: web-app
+spec:
+  hosts:
+    - web-app
+  http:
+    - match:
+        - uri:
+            prefix: "/admin"
+      route:
+        - destination:
+            host: web-app
+            subset: admin
+    - match:
+        - uri:
+            prefix: "/api"
+      route:
+        - destination:
+            host: web-app
+            subset: api
+    - route:
+        - destination:
+            host: web-app
+            subset: web
