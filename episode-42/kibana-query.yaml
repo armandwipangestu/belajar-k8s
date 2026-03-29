@@ -1,0 +1,15 @@
+# Find errors at production
+{
+  "query":
+    {
+      "bool":
+        {
+          "must":
+            [
+              { "match": { "level": "ERROR" } },
+              { "match": { "namespace": "production" } },
+              { "range": { "timestamp": { "gte": "now-1h" } } },
+            ],
+        },
+    },
+}

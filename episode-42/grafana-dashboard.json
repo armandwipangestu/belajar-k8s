@@ -1,0 +1,31 @@
+{
+  "dashboard": {
+    "title": "Kubernetes Cluster",
+    "panels": [
+      {
+        "title": "CPU Usage",
+        "targets": [
+          {
+            "expr": "sum(rate(container_cpu_usage_seconds_total[5m])) by (pod_name)"
+          }
+        ]
+      },
+      {
+        "title": "Memory Usage",
+        "targets": [
+          {
+            "expr": "sum(container_memory_usage_bytes) by (pod_name)"
+          }
+        ]
+      },
+      {
+        "title": "Pod Restarts",
+        "targets": [
+          {
+            "expr": "kube_pod_container_status_restarts_total"
+          }
+        ]
+      }
+    ]
+  }
+}
