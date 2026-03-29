@@ -1,3 +1,28 @@
+## [1.15.0](https://github.com/armandwipangestu/belajar-k8s/compare/v1.14.0...v1.15.0) (2026-03-29)
+
+### ✨ Features
+
+* add episode-24 manifest file ([67e7ba2](https://github.com/armandwipangestu/belajar-k8s/commit/67e7ba228891219eac0c06e1e54a90b22b1524c8))
+* add episode-25 manifest file ([f1d7177](https://github.com/armandwipangestu/belajar-k8s/commit/f1d7177bd504888378ae16098d9a2582e2ca111b))
+* add episode-26 manifest file ([986f074](https://github.com/armandwipangestu/belajar-k8s/commit/986f0740707ecbb788419c143c1881cf3135faf1))
+* add episode-27 manifest file ([9c331e4](https://github.com/armandwipangestu/belajar-k8s/commit/9c331e410a10c86cbbef30bb0a979cffa7ce2503))
+* add episode-28 manifest file ([8cc9b40](https://github.com/armandwipangestu/belajar-k8s/commit/8cc9b40d52bff4dc25dd7c5861ff678cb2cc5853))
+* add episode-29 manifest file ([e5ef4d5](https://github.com/armandwipangestu/belajar-k8s/commit/e5ef4d5dc993c205017de3b09e90fcdc1b827269))
+* add episode-30 manifest file ([145ab08](https://github.com/armandwipangestu/belajar-k8s/commit/145ab08ff909c52c0f2723775ee64a4550bba9a9))
+* add episode-31 manifest file ([f236c6e](https://github.com/armandwipangestu/belajar-k8s/commit/f236c6efc0ff77ea48ae5383b9e077115ff636e0))
+* add episode-32 manifest file ([5cd1396](https://github.com/armandwipangestu/belajar-k8s/commit/5cd13966cdc89048aee471bb6f4cab1bce16611e))
+* add episode-33 manifest file ([646ae58](https://github.com/armandwipangestu/belajar-k8s/commit/646ae586abad9f5e3b1217d76d76cef3c5c69631))
+* add episode-34 manifest file ([e117abb](https://github.com/armandwipangestu/belajar-k8s/commit/e117abbef9cfc6ae2bb7ee9103413bb9bc8fe687))
+* add episode-35 manifest file ([8a54f4a](https://github.com/armandwipangestu/belajar-k8s/commit/8a54f4a7e13f1d95a0c1aeae6865e9067cd22fd3))
+* add episode-36 manifest file ([93ca2e1](https://github.com/armandwipangestu/belajar-k8s/commit/93ca2e197c07215da49d94695e4d81a2aa597b07))
+* add episode-37 manifest file ([971036d](https://github.com/armandwipangestu/belajar-k8s/commit/971036d43c1db7f275e457c081ba3e2247a08344))
+* add episode-38 manifest file ([7af3939](https://github.com/armandwipangestu/belajar-k8s/commit/7af3939e70b8a192cdf2138bf98b810e36471e37))
+* add episode-39 manifest file ([fb587d0](https://github.com/armandwipangestu/belajar-k8s/commit/fb587d0892ccfb104181c90ae7ba6fb00324474d))
+* add episode-40 manifest file ([4c63764](https://github.com/armandwipangestu/belajar-k8s/commit/4c63764415d70fcc5cae79de77703cd32fa324dd))
+* add episode-41 manifest file ([6dd4d7b](https://github.com/armandwipangestu/belajar-k8s/commit/6dd4d7b3bf49a3b11a47c4c0787aebeb468ce129))
+* add episode-42 manifest file ([bc1c8fc](https://github.com/armandwipangestu/belajar-k8s/commit/bc1c8fccd133ef173500c7ab29915be92777e814))
+* add episode-43 manifest file ([57bd60d](https://github.com/armandwipangestu/belajar-k8s/commit/57bd60d78f68284161d13da27bb082535ec8d6a7))
+
 ## [1.14.0](https://github.com/armandwipangestu/belajar-k8s/compare/v1.13.0...v1.14.0) (2026-03-25)
 
 ### ✨ Features
