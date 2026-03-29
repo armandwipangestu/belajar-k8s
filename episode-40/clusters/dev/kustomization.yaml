@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../apps/web-app/overlays/dev
+  - ../../apps/api-app/overlays/dev
+
+namespace: dev

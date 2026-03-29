@@ -1,0 +1,39 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: behavior-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: web-app
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300 # Wait 5 min before scale down
+      policies:
+        - type: Percent
+          value: 50 # Max 50% from current replica
+          periodSeconds: 60 # Per min
+        - type: Pods
+          value: 2 # Max 2 Pod
+          periodSeconds: 60 # Per min
+      selectPolicy: Min # Used most conservative policy
+    scaleUp:
+      stabilizationWindowSeconds: 0 # Scale up immediately
+      policies:
+        - type: Percent
+          value: 100 # Max 100% from current replica
+          periodSeconds: 15 # Per 15 seconds
+        - type: Pods
+          value: 4 # Max 4 Pod
+          periodSeconds: 15 # Per 15 seconds
+      selectPolicy: Max # Used most aggressive policy

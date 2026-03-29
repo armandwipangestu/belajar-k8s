@@ -1,0 +1,21 @@
+groups:
+  - name: kubernetes.rules
+    interval: 30s
+    rules:
+      - alert: PodCrashLooping
+        expr: rate(kube_pod_container_status_restarts_total[15m]) > 0.1
+        for: 5m
+        annotations:
+          summary: "Pod {{ $labels.pod }} is crash looping"
+
+      - alert: NodeNotReady
+        expr: kube_node_status_condition{condition="Ready",status="true"} == 0
+        for: 5m
+        annotations:
+          summary: "Node {{ $labels.node }} is not ready"
+
+      - alert: HighMemoryUsage
+        expr: (container_memory_usage_bytes / container_spec_memory_limit_bytes) > 0.9
+        for: 5m
+        annotations:
+          summary: "Pod {{ $labels.pod }} memory usage is above 90%"

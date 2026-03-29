@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: downward-env-pod
+  namespace: default
+  labels:
+    app: myapp
+    version: v1.0
+    tier: backend
+spec:
+  containers:
+    - name: app
+      image: busybox:1.36
+      command:
+        - sh
+        - -c
+        - |
+          echo "Pod Name: $POD_NAME"
+          echo "Pod Namespace: $POD_NAMESPACE"
+          echo "Pod IP: $POD_IP"
+          echo "Node Name: $NODE_NAME"
+          echo "NOde IP: $NODE_IP"
+          echo "Service Account Name: $SERVICE_ACCOUNT_NAME"
+          sleep 3600
+      env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: SERVICE_ACCOUNT_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.serviceAccountName

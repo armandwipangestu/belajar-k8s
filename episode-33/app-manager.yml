@@ -1,0 +1,38 @@
+# Role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: app-manager
+  namespace: production
+rules:
+  # Manage Deployment
+  - apiGroups: ["apps"]
+    resources: ["deployments", "replicasets"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  # Manage Service
+  - apiGroups: [""]
+    resources: ["services"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  # Read ConfigMap dan Secret
+  - apiGroups: [""]
+    resources: ["configmaps", "secrets"]
+    verbs: ["get", "list"]
+  # View Pod dan log
+  - apiGroups: [""]
+    resources: ["pods", "pods/log"]
+    verbs: ["get", "list", "watch"]
+---
+# RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: app-manager-binding
+  namespace: production
+subjects:
+  - kind: ServiceAccount
+    name: app-manager-sa
+    namespace: production
+roleRef:
+  kind: Role
+  name: app-manager
+  apiGroup: rbac.authorization.k8s.io

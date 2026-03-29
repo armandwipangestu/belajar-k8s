@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: resources-volume-pod
+spec:
+  containers:
+    - name: app
+      image: myapp:latest
+      resources:
+        requests:
+          memory: "256Mi"
+          cpu: "250m"
+        limits:
+          memory: "512Mi"
+          cpu: "500m"
+      volumeMounts:
+        - name: podinfo
+          mountPath: /etc/podinfo
+  volumes:
+    - name: podinfo
+      downwardAPI:
+        items:
+          - path: "memory-request"
+            resourceFieldRef:
+              containerName: app
+              resource: requests.memory
+          - path: "memory-limit"
+            resourceFieldRef:
+              containerName: app
+              resource: limits.memory
+          - path: "cpu-request"
+            resourceFieldRef:
+              containerName: app
+              resource: requests.cpu
+          - path: "cpu-limit"
+            resourceFieldRef:
+              containerName: app
+              resource: limits.cpu

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: flexible-pod
+spec:
+  tolerations:
+    - key: workload-type
+      operator: Exists # Accept any value
+      effect: NoSchedule
+  containers:
+    - name: app
+      image: myapp:latest

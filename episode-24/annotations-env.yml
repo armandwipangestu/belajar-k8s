@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: annotations-env-pod
+  annotations:
+    description: "Production web server"
+    owner: "platform-team"
+    version: "1.0.0"
+spec:
+  containers:
+    - name: app
+      image: nginx:1.25
+      env:
+        - name: POD_DESCRIPTION
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.annotations['description']
+        - name: POD_OWNER
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.annotations['owner']
+        - name: POD_VERSION
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.annotations['version']

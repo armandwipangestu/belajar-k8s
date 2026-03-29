@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-with-sidecar
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        # Main application
+        - name: app
+          image: myapp:latest
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: logs
+              mountPath: /var/log/app
+        # Log shipper sidecar
+        - name: log-shipper
+          image: fluent/fluentd:v1.16
+          volumeMounts:
+            - name: logs
+              mountPath: /var/log/app
+              readOnly: true
+      volumes:
+        - name: logs
+          emptyDir: {}

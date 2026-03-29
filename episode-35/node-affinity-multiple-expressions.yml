@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-operators
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: node-type
+                operator: In
+                values:
+                  - compute
+              - key: gpu
+                operator: Exists
+              - key: cpu-cores
+                operator: Gt
+                values:
+                  - "4"
+  containers:
+    - name: nginx
+      image: nginx:latest

@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: full-stack
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - repoURL: https://github.com/your-org/gitops-repo
+      targetRevision: main
+      path: apps/web-app/overlays/production
+    - repoURL: https://github.com/your-org/gitops-repo
+      targetRevision: main
+      path: apps/api-app/overlays/production
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: production
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

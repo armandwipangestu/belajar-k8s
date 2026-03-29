@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: db-with-cache
+spec:
+  affinity:
+    podAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              app: database
+          topologyKey: kubernetes.io/hostname
+  containers:
+    - name: cache
+      image: redis:latest
+      resources:
+        requests:
+          cpu: 50m
+          memory: 256Mi

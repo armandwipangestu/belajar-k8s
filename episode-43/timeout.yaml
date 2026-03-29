@@ -1,0 +1,12 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: web-app
+spec:
+  hosts:
+    - web-app
+  http:
+    - route:
+        - destination:
+            host: web-app
+      timeout: 10s

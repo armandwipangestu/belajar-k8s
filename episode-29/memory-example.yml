@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: memory-demo
+spec:
+  containers:
+    - name: app
+      image: nginx:1.25
+      resources:
+        requests:
+          memory: "256Mi" # Guaranteed 256 MiB
+        limits:
+          memory: "512Mi" # Max 512 MiB

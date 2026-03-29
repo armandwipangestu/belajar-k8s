@@ -1,0 +1,49 @@
+# ServiceAccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: developer
+  namespace: development
+---
+# Role - Development environment access
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: developer-role
+  namespace: development
+rules:
+  # Full access to Deployment
+  - apiGroups: ["apps"]
+    resources: ["deployments", "replicasets"]
+    verbs: ["*"]
+  # Full access to Service
+  - apiGroups: [""]
+    resources: ["services"]
+    verbs: ["*"]
+  # Full access to ConfigMap
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["*"]
+  # Read-only Secret
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list"]
+  # Pod management
+  - apiGroups: [""]
+    resources: ["pods", "pods/log", "pods/exec"]
+    verbs: ["get", "list", "watch", "create", "delete"]
+---
+# RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: developer-binding
+  namespace: development
+subjects:
+  - kind: ServiceAccount
+    name: developer
+    namespace: development
+roleRef:
+  kind: Role
+  name: developer-role
+  apiGroup: rbac.authorization.k8s.io

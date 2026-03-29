@@ -1,0 +1,25 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: web-app
+spec:
+  hosts:
+    - web-app
+  http:
+    - match:
+        - headers:
+            user-agent:
+              regex: ".*Chrome.*"
+      route:
+        - destination:
+            host: web-app
+            subset: v2
+    - route:
+        - destination:
+            host: web-app
+            subset: v1
+          weight: 95
+        - destination:
+            host: web-app
+            subset: v2
+          weight: 5

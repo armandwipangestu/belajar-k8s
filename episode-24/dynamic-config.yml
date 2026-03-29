@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dynamic-config-pod
+  labels:
+    app: myapp
+    feature-flag-new-ui: "true"
+    feature-flag-beta-api: "false"
+    cache-enabled: "true"
+spec:
+  containers:
+    - name: app
+      image: myapp:latest
+      env:
+        # Feature flag from label
+        - name: FEATURE_NEW_UI
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['feature-flag-new-ui']
+        - name: FEATURE_BETA_API
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['feature-flag-beta-api']
+        - name: CACHE_ENABLED
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['cache-enabled']

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: special-workload
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: special
+  template:
+    metadata:
+      labels:
+        app: special
+    spec:
+      tolerations:
+        - key: workload-type
+          operator: Equal
+          value: special
+          effect: NoSchedule
+      containers:
+        - name: app
+          image: special-app:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"

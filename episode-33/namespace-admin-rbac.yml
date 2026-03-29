@@ -1,0 +1,21 @@
+# ServiceAccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: namespace-admin
+  namespace: production
+---
+# RoleBinding - Used built-in admin role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: namespace-admin-binding
+  namespace: production
+subjects:
+  - kind: ServiceAccount
+    name: namespace-admin
+    namespace: production
+roleRef:
+  kind: ClusterRole
+  name: admin # Built-in ClusterRole
+  apiGroup: rbac.authorization.k8s.io

@@ -1,0 +1,22 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: web-app-policy
+spec:
+  selector:
+    matchLabels:
+      app: web-app
+  rules:
+    - from:
+        - source:
+            principals: ["cluster.local/ns/default/sa/api-service"]
+      to:
+        - operation:
+            methods: ["GET"]
+            paths: ["/api/v1/*"]
+    - from:
+        - source:
+            principals: ["cluster.local/ns/default/sa/admin-service"]
+      to:
+        - operation:
+            methods: ["*"]

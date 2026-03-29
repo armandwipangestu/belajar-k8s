@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app-blue
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-app
+      version: blue
+  template:
+    metadata:
+      labels:
+        app: web-app
+        version: blue
+    spec:
+      containers:
+        - name: web-app
+          image: myapp:1.0
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app-green
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-app
+      version: green
+  template:
+    metadata:
+      labels:
+        app: web-app
+        version: green
+    spec:
+      containers:
+        - name: web-app
+          image: myapp:2.0
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: web-app
+spec:
+  hosts:
+    - web-app
+  http:
+    - route:
+        - destination:
+            host: web-app
+            subset: blue
+          weight: 100
+        - destination:
+            host: web-app
+            subset: green
+          weight: 0

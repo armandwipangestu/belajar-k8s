@@ -1,0 +1,24 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: web-app
+spec:
+  hosts:
+    - web-app
+  http:
+    - match:
+        - uri:
+          prefix: "/api"
+      route:
+        - destination:
+            host: web-app
+            port:
+              number: 8080
+            subset: v1
+          weight: 90
+        - destination:
+            host: web-app
+            port:
+              number: 8080
+            subset: v2
+          weight: 10

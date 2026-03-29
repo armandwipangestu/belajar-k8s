@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: readonly-fs
+spec:
+  containers:
+    - name: app
+      image: myapp:latest
+      securityContext:
+        readOnlyRootFilesystem: true
+      volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: var-log
+          mountPath: /var/log
+  volumes:
+    - name: tmp
+      emptyDir: {}
+    - name: var-log
+      emptyDir: {}

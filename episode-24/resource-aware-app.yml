@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: resource-aware-pod
+spec:
+  containers:
+    - name: app
+      image: java-app:latest
+      resources:
+        requests:
+          memory: "1Gi"
+          cpu: "500m"
+        limits:
+          memory: "2Gi"
+          cpu: "1000m"
+      env:
+        # JVM can used this to set heap size
+        - name: MEMORY_LIMIT_MB
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.memory
+              divisor: 1Mi
+        - name: CPU_LIMIT_CORES
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.cpu
+              divisor: "1"
+        # Application calculate optimal setting
+        # Example: JVM heap = 80% dari MEMORY_LIMIT_MB
+        # Example: Thread pool size = CPU_LIMIT_CORES * 2

@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: labels-env-pod
+  labels:
+    app: myapp
+    version: v1.0
+    environment: production
+spec:
+  containers:
+    - name: app
+      image: nginx:1.25
+      env:
+        - name: APP_LABEL
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['app']
+        - name: VERSION_LABEL
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['version']
+        - name: ENVIRONMENT_LABEL
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['environment']

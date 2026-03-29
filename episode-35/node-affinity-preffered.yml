@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-preferred
+spec:
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          preference:
+            matchExpressions:
+              - key: disk-type
+                operator: In
+                values:
+                  - ssd
+        - weight: 50
+          preference:
+            matchExpressions:
+              - key: zone
+                operator: In
+                values:
+                  - us-east-1a
+  containers:
+    - name: nginx
+      image: nginx:latest
