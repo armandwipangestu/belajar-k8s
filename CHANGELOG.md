@@ -1,3 +1,9 @@
+## [1.15.1](https://github.com/armandwipangestu/belajar-k8s/compare/v1.15.0...v1.15.1) (2026-04-23)
+
+### 🐛 Bug Fixes
+
+* **network:** binding to wildcard ([6d28e5d](https://github.com/armandwipangestu/belajar-k8s/commit/6d28e5d7a7e3af65480b8d2330b7cce4fe4b9e00))
+
 ## [1.15.0](https://github.com/armandwipangestu/belajar-k8s/compare/v1.14.0...v1.15.0) (2026-03-29)
 
 ### ✨ Features
